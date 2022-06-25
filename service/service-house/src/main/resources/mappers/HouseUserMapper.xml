@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.mapper.HouseUserMapper">
+    <sql id="columns">
+        select id,house_id,name,phone,sex,id_no,create_time,update_time,is_deleted
+    </sql>
+    <select id="findHouseUserListByHouseId" resultType="HouseUser">
+        <include refid="columns"></include>
+        from hse_house_user
+        where house_id=#{id} and is_deleted=0
+    </select>
+
+    <insert id="insert">
+        insert into hse_house_user(house_id,name,phone,sex,id_no) values (#{houseId},#{name},#{phone},#{sex},#{idNo})
+    </insert>
+
+    <select id="getById" resultType="HouseUser">
+        <include refid="columns"></include>
+        from hse_house_user
+        where id=#{id}
+    </select>
+
+    <update id="update">
+        update hse_house_user
+        <set>
+            <if test="houseId != null">
+                house_id = #{houseId},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="idNo != null">
+                id_no = #{idNo},
+            </if>
+            update_time=now()
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="delete">
+        update hse_house_user set update_time=now(),is_deleted=1 where id=#{id}
+    </update>
+</mapper>
